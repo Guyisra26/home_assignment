@@ -8,15 +8,9 @@ class StatusEnum(str, Enum):
     inactive = "inactive"
 
 
-class UpdateUserStatus(BaseModel):
-    status: StatusEnum
-
-
 class User(BaseModel):
-    id: int
     status: StatusEnum = Field(..., description="Active/inactive")
 
 
 class Partner(BaseModel):
-    id: int
     data: Any = Field(..., description="Any JSON-compatible data")
