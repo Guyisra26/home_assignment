@@ -9,7 +9,7 @@ client = TestClient(app)
 def test_create_user():
     response = client.post("/users", json={"status": "active"})
     user_id = UUID(response.json())
-    exists_user = client.get(f"/users?id={user_id}")
+    exists_user = client.get(f"/users/{user_id}")
     assert response.status_code == 200
     assert exists_user.status_code == 200
 
@@ -32,15 +32,15 @@ def test_get_users():
 
 
 def test_get_users_invalid_id():
-    response = client.get("/users?id=4309t4p-27d1-4511-b6da-ee40b1b14f07")
+    response = client.get("/users/4309t4p-27d1-4511-b6da-ee40b1b14f07")
     assert response.status_code == 422
 
 
 def test_update_user():
     user_res = client.post("/users", json={"status": "active"})
     user_id = user_res.json()
-    is_updated = client.put(f"/users?id={user_id}", json={"status": "inactive"})
-    updated_user_res = client.get(f"/users?id={user_id}")
+    is_updated = client.put(f"/users/{user_id}", json={"status": "inactive"})
+    updated_user_res = client.get(f"/users/{user_id}")
     assert user_res.status_code == 200
     assert is_updated.status_code == 200
     assert updated_user_res.json() == {"status": "inactive"}
@@ -48,9 +48,9 @@ def test_update_user():
 
 def test_delete_user():
     new_user = client.post("/users", json={"status": "active"})
-    response = client.delete(f"/users?id={new_user.json()}")
+    response = client.delete(f"/users/{new_user.json()}")
     assert response.status_code == 200
-    response = client.get(f"/users?id={new_user.json()}")
+    response = client.get(f"/users/{new_user.json()}")
     assert response.status_code == 404
 
 

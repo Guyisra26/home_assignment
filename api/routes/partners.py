@@ -7,6 +7,7 @@ from typing import Optional
 from models.schema import Partner
 from init_services import partners_db
 from uuid import UUID
+from fastapi import Body
 
 router = APIRouter(prefix="/partners", tags=["partners"])
 
@@ -20,13 +21,13 @@ def get_partners(id: Optional[UUID] = None):
 
 
 @router.post("")
-def create_partner(partner: Partner = ...):
+def create_partner(partner: Partner = Body(...)):
     partner_id = partners_db.put(partner.model_dump(mode="json"))
     return JSONResponse(status_code=HTTPStatus.OK, content=partner_id)
 
 
 @router.put("")
-def update_partner(id: UUID = Query(...), partner: Partner = ...):
+def update_partner(id: UUID = Query(...), partner: Partner = Body(...)):
     existing_partner = partners_db.get(id)
     if not existing_partner:
         raise HTTPException(status_code=404, detail="Partner not found")
