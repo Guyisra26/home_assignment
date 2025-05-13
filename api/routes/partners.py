@@ -19,12 +19,14 @@ def get_all_partners():
         raise HTTPException(status_code=404, detail="Partner not found")
     return JSONResponse(status_code=HTTPStatus.OK, content=response)
 
+
 @router.get("/{id}")
-def get_partner_by_id(id: UUID ):
+def get_partner_by_id(id: UUID):
     response = partners_db.get(id)
     if response is None:
         raise HTTPException(status_code=404, detail="Partner not found")
     return JSONResponse(status_code=HTTPStatus.OK, content=response)
+
 
 @router.post("")
 def create_partner(partner: Partner = Body(...)):
