@@ -73,9 +73,9 @@ def test_update_partner():
     partner_res = client.post("/partners", json={"data": {"name": "Amazon Inc."}})
     partner_id = partner_res.json()
     is_updated = client.put(
-        f"/partners?id={partner_id}", json={"data": {"name": "Microsoft Inc."}}
+        f"/partners/{partner_id}", json={"data": {"name": "Microsoft Inc."}}
     )
-    updated_partner_res = client.get(f"/partners?id={partner_id}")
+    updated_partner_res = client.get(f"/partners/{partner_id}")
     assert partner_res.status_code == 200
     assert is_updated.status_code == 200
     assert updated_partner_res.json() == {"data": {"name": "Microsoft Inc."}}
@@ -83,9 +83,9 @@ def test_update_partner():
 
 def test_delete_partner():
     new_partner = client.post("/partners", json={"data": {"name": "Meta Inc."}})
-    response = client.delete(f"/partners?id={new_partner.json()}")
+    response = client.delete(f"/partners/{new_partner.json()}")
     assert response.status_code == 200
-    response = client.get(f"/partners?id={new_partner.json()}")
+    response = client.get(f"/partners/{new_partner.json()}")
     assert response.status_code == 404
 
 
